@@ -3,15 +3,23 @@ import 'package:flutter/material.dart';
 import 'package:myapp/widget/widget-utils.dart';
 import 'package:myapp/api/api-utils.dart';
 
+///
+/// 
+///
 class Overview extends StatefulWidget{
   @override
   State createState() => new OverviewState();
 }
 
 const List<Currency> watched = const <Currency>[Currencies.BITCOIN, Currencies.BITCOIN_CASH, Currencies.ETHERUM, Currencies.RIPPLE, Currencies.LITECOIN];
-
+///
+/// 
+///
 class OverviewState extends State<Overview> {
 
+///
+/// relevant: https://stackoverflow.com/questions/12888206/how-can-i-sort-a-list-of-strings-in-dart
+///
   List<CryptoEntry> _list = [];
 
   @override
@@ -20,6 +28,10 @@ class OverviewState extends State<Overview> {
     listenForEntries();
   }
 
+  ///
+  /// Loops through all entries contained in [watched] and invokes the utils method [APIUtils.getData] with the current [Currency].
+  /// After successful answer from the API the data is automatically converted into a [CryptoEntry] and put into [_list].
+  ///
   listenForEntries() {
     watched.forEach((c) async{
       var stream = await APIUtils.getData(c, <Currency>[Currencies.EURO]);
@@ -32,54 +44,40 @@ class OverviewState extends State<Overview> {
     });
   }
 
-  int _screen = 0;
-
   @override
   Widget build(BuildContext context) {
     return new DefaultTabController(
       length: 2,
       child: new Scaffold(
         appBar: WidgetUtils.buildAppBar(_refresh),
-        body: buildBody(),
-        bottomNavigationBar: WidgetUtils.buildBottomNavigationBar(_handleNavigationBarTap, _screen)
+        body: buildBody()
       ),
     );
-
   }
 
-  void _handleNavigationBarTap(int index){
-    print("index: " + index.toString());
-    setState(() {
-      _screen = index;
-    });
-  }
-  void _refresh(){
-    _list.clear();
+  ///
+  /// Clears [_list] and then reinvokes [listenForEntries] for a refresh of the data displayed on the screen.
+  ///
+  _refresh(){
+    this._list.clear();
     listenForEntries();
   }
 
+  ///
+  /// Method for building the [Widget]s displayed on screen.
+  ///
   Widget buildBody(){
-    switch(_screen){
-      case 1:
-        return new TabBarView(
-          children: new List<Widget>.generate(6, (index) {
-            return new Center(
-              child: new Text("Ja moin $index")
-            );
-          })
-        );
-        break;
-      default:
-        return new Center(
-          child: new ListView(
-            children: _list.map((entry) => new CryptoWidget(entry)).toList(),
-          )
-        );
-        break;
-    }
+    return new Center(
+      child: new ListView(
+        children: _list.map((entry) => new CryptoWidget(entry)).toList(),
+      )
+    );
   }
 }
 
+///
+/// Data class that holds basic data about a single [Currency]
+///
 class CryptoEntry {
 
   final String titleAbr;
@@ -98,6 +96,9 @@ class CryptoEntry {
   String toString() => "Currency: $titleAbr";
 }
 
+///
+/// Reusable widget that displays basic information contained in a [CryptoEntry] instance
+///
 class CryptoWidget extends StatelessWidget{
 
   final CryptoEntry _cryptoEntry;

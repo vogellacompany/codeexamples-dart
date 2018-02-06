@@ -19,6 +19,5 @@ class CryptoRateApp extends StatelessWidget {
 			home: new Overview()
 		);
 	}
-
 }
 

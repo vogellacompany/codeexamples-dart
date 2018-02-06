@@ -8,30 +8,33 @@ final String apiUrl = "https://min-api.cryptocompare.com/data/price?";
 
 class APIUtils {
 
-    static getData(Currency from, List<Currency> to) async {
-      var url = _buildURL(from.abr, to);
-      var client = new http.Client();
-      var streamedRes = await client.send(
-        new http.Request('get', Uri.parse(url))
-      );
+  ///
+  /// Makes a request to [apiUrl] to get the current rates about [from] and to the .
+  /// Returns a stream with the retrieved data
+  ///
+  static getData(Currency from, List<Currency> to) async {
+    var url = _buildURL(from.abr, to);
+    var client = new http.Client();
+    var streamedRes = await client.send(
+      new http.Request('get', Uri.parse(url))
+    );
 
-      return streamedRes.stream
-              .transform(UTF8.decoder)
-              .transform(JSON.decoder)
-              //.expand((jsonBody) => (jsonBody as Map)[0])
-              .map((jsonCrypto) => new CryptoEntry.fromJSON(from, jsonCrypto))
-              ;
-    }
+    return streamedRes.stream
+            .transform(UTF8.decoder)
+            .transform(JSON.decoder)
+            .map((jsonCrypto) => new CryptoEntry.fromJSON(from, jsonCrypto))
+            ;
+  }
 
-    static _buildURL(String from, List<Currency> to){
-      String _tmp = apiUrl + "fsym=" + from + "&";
-      String x = "tsyms=";
-      for(int i = 0; i < to.length; i++){
-        x = x + to[i].abr + ",";
-      }
-      print(_tmp + x);
-      return _tmp + x;
+  static _buildURL(String from, List<Currency> to){
+    String _tmp = apiUrl + "fsym=" + from + "&";
+    String x = "tsyms=";
+    for(int i = 0; i < to.length; i++){
+      x = x + to[i].abr + ",";
     }
+    print(_tmp + x);
+    return _tmp + x;
+  }
 
 }
 
@@ -54,6 +57,5 @@ class Currencies {
   static const Currency ETHERUM = const Currency("Etherum", "ETH", "ETH");
   static const Currency EURO = const Currency("Euro", "€", "EUR");
   static const Currency DOLLAR = const Currency("dollar", "\$", "USD");
-  
 
 }
