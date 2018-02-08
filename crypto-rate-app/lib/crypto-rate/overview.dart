@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-import 'package:myapp/widget/widget-utils.dart';
 import 'package:myapp/api/api-utils.dart';
 
 ///
@@ -39,6 +38,7 @@ class OverviewState extends State<Overview> {
         print(entry);
         setState(() {
           _list.add(entry);
+          _list.sort();
         });
       });
     });
@@ -49,7 +49,7 @@ class OverviewState extends State<Overview> {
     return new DefaultTabController(
       length: 2,
       child: new Scaffold(
-        appBar: WidgetUtils.buildAppBar(_refresh),
+        appBar: buildAppBar(),
         body: buildBody()
       ),
     );
@@ -73,12 +73,28 @@ class OverviewState extends State<Overview> {
       )
     );
   }
+
+  ///
+  /// Method for building the [AppBar] on top of the screen.
+  ///
+  AppBar buildAppBar(){
+    return new AppBar(
+      title: new Text("CryptosRate"),
+      elevation: 4.0,
+      actions: <Widget>[
+        new IconButton(
+          icon: new Icon(Icons.refresh),
+          onPressed: _refresh,
+        ),
+      ]
+    );
+  }
 }
 
 ///
 /// Data class that holds basic data about a single [Currency]
 ///
-class CryptoEntry {
+class CryptoEntry extends Comparable<CryptoEntry>{
 
   final String titleAbr;
   final String titleFull;
@@ -94,6 +110,22 @@ class CryptoEntry {
     conversionRates = jsonMap;
 
   String toString() => "Currency: $titleAbr";
+
+  /// Returns the conversion rate to eur
+  ///
+  /// TODO: This needs to be more dynamic. Maybe store the user preference somewhere?
+  double _getPriceEur(){
+    return this.conversionRates["EUR"];
+  }
+
+  @override
+  int compareTo(CryptoEntry other) {
+    if(other._getPriceEur() < this._getPriceEur()){
+      return -1;
+    }else{
+      return 1;
+    }
+  }
 }
 
 ///
@@ -124,5 +156,4 @@ class CryptoWidget extends StatelessWidget{
       ),
     );
   }
-
 }
