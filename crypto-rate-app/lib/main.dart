@@ -3,7 +3,7 @@ import 'package:flutter/cupertino.dart';
 
 import 'package:myapp/crypto-rate/overview.dart';
 
-import 'package:myapp/theme/android.dart';
+import 'package:myapp/theme/theme.dart';
 
 void main() {
 	runApp(new CryptoRateApp());
