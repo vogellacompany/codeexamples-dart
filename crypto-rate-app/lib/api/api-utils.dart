@@ -1,4 +1,5 @@
 import "dart:convert";
+import "dart:io";
 import 'package:http/http.dart' as http;
 
 import 'package:myapp/crypto-rate/overview.dart';
@@ -12,17 +13,7 @@ class APIUtils {
   /// Returns a stream with the retrieved data
   ///
   static getData(Currency from, List<Currency> to) async {
-    var url = _buildURL(from.abr, to);
-    var client = new http.Client();
-    var streamedRes = await client.send(
-      new http.Request('get', Uri.parse(url))
-    );
-
-    return streamedRes.stream
-            .transform(UTF8.decoder)
-            .transform(JSON.decoder)
-            .map((jsonCrypto) => new CryptoEntry.fromJSON(from, jsonCrypto))
-            ;
+    
   }
 
   static _buildURL(String from, List<Currency> to){
