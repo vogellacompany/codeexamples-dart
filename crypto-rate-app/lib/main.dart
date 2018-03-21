@@ -38,11 +38,11 @@ class OverviewState extends State<Overview> {
   /// whicht refreshes and rebuilds the list that is shown to the user, 
   /// 
   listenForEntries() async{
-      _map.putIfAbsent("BTC", () => new CryptoEntry("BTC", "Bitcoin", 0.0));
-      _map.putIfAbsent("BTC", () => new CryptoEntry("BCH", "Bitcoin Cash", 0.0));
-      _map.putIfAbsent("BTC", () => new CryptoEntry("LTC", "Litecoin", 0.0));
-      _map.putIfAbsent("BTC", () => new CryptoEntry("XRP", "Ripple", 0.0));
-      _map.putIfAbsent("BTC", () => new CryptoEntry("ETH", "Etherum", 0.0));
+    _map.putIfAbsent("BTC", () => new CryptoEntry("Bitcoin", "BTC", 0.0));
+    _map.putIfAbsent("BTC", () => new CryptoEntry("Bitcoin Cash", "BCH", 0.0));
+    _map.putIfAbsent("BTC", () => new CryptoEntry("Litecoin", "LTC", 0.0));
+    _map.putIfAbsent("BTC", () => new CryptoEntry("Ripple", "XRP", 0.0));
+  	_map.putIfAbsent("BTC", () => new CryptoEntry("Etherum", "ETH", 0.0));
     var url = "https://min-api.cryptocompare.com/data/pricemulti?tsyms=EUR&fsyms=BTC,BCH,LTC,XRP,ETH";
     var httpClient = new HttpClient();
     Map data;
@@ -103,21 +103,17 @@ class OverviewState extends State<Overview> {
 /// Data class that holds basic data about a single Currency
 class CryptoEntry extends Comparable<CryptoEntry>{
 
-  final String titleAbr;
-  final String titleFull;
+  final String name;
+  final String abreviation;
   double conversionRate;
 
-  CryptoEntry(this.titleAbr, this.titleFull, this.conversionRate);
+  CryptoEntry(this.name, this.abreviation, this.conversionRate);
 
-  String toString() => "Currency: $titleAbr";
+  String toString() => "Currency: $abreviation";
 
   @override
   int compareTo(CryptoEntry other) {
-    if(other.conversionRate < this.conversionRate){
-      return -1;
-    }else{
-      return 1;
-    }
+    return other.conversionRate < this.conversionRate ? -1 : 1;
   }
 }
 
