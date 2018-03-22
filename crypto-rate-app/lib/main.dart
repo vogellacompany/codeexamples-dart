@@ -38,19 +38,19 @@ class OverviewState extends State<Overview> {
   /// whicht refreshes and rebuilds the list that is shown to the user, 
   /// 
   listenForEntries() async{
-    _map["BTC"] = new CryptoEntry("Bitcoin", "BTC", -1.0);
+    _map["BTC"] = new CryptoEntry("Bitcoin",      "BTC", -1.0);
     _map["BCH"] = new CryptoEntry("Bitcoin Cash", "BCH", -1.0);
-    _map["LTC"] = new CryptoEntry("Litecoin", "LTC", -1.0);
-    _map["XRP"] = new CryptoEntry("Ripple", "XRP", -1.0);
-  	_map["ETH"] = new CryptoEntry("Etherum", "ETH", -1.0);
-    var url = "https://min-api.cryptocompare.com/data/pricemulti?tsyms=EUR&fsyms=BTC,BCH,LTC,XRP,ETH";
-    var httpClient = new HttpClient();
+    _map["LTC"] = new CryptoEntry("Litecoin",     "LTC", -1.0);
+    _map["XRP"] = new CryptoEntry("Ripple",       "XRP", -1.0);
+  	_map["ETH"] = new CryptoEntry("Etherum",      "ETH", -1.0);
+    String url = "https://min-api.cryptocompare.com/data/pricemulti?tsyms=EUR&fsyms=BTC,BCH,LTC,XRP,ETH";
+    HttpClient httpClient = HttpClient();
     try{
-      var request = await httpClient.getUrl(Uri.parse(url));
-      var response = await request.close();
+      HttpClientRequest request = await httpClient.getUrl(Uri.parse(url));
+      HttpClientResponse response = await request.close();
       if(response.statusCode == HttpStatus.OK) {
-        var json = await response.transform(UTF8.decoder).join();
-        Map data = JSON.decode(json);
+        String json = await response.transform(UTF8.decoder).join();
+        Map data = JSON.decode(json) as Map;
         data.forEach((e, x) {
           double conversionRate = x["EUR"];
           CryptoEntry entry = _map[e];
@@ -65,26 +65,23 @@ class OverviewState extends State<Overview> {
 
   @override
   Widget build(BuildContext context) {
-    return new DefaultTabController(
-      length: 2,
-      child: new Scaffold(
-        appBar: new AppBar(
-          title: new Text("CryptoRate"),
+    return Scaffold(
+        appBar: AppBar(
+          title: Text("CryptoRate"),
           elevation: 4.0,
           actions: <Widget>[
-            new IconButton(
-              icon: new Icon(Icons.refresh),
+            IconButton(
+              icon: Icon(Icons.refresh),
               onPressed: _refresh,
             ),
           ]
         ),
-        body: new Center(
-          child: new ListView(
-            children: _map.values.map((entry) => new CryptoWidget(entry)).toList(),
+        body: Center(
+          child: ListView(
+            children: _map.values.map((entry) => CryptoWidget(entry)).toList(),
           )
         ),
-      ),
-    );
+      );
   }
 
   /// Clears [_list] and then reinvokes [listenForEntries] for a refresh of the data displayed on the screen.
@@ -121,18 +118,18 @@ class CryptoWidget extends StatelessWidget{
 
   @override
   Widget build(BuildContext context){
-    return new Card(
+    return Card(
       elevation: 0.0,
-      child: new Column(
+      child: Column(
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
-          new ListTile(
-            leading: new CircleAvatar(
-              child: new Text(_cryptoEntry.abreviation),
+          ListTile(
+            leading: CircleAvatar(
+              child: Text(_cryptoEntry.abreviation),
             ),
-            title: new Text(_cryptoEntry.abreviation),
-            subtitle: new Text(_cryptoEntry.name),
-            trailing: new Text("${(_cryptoEntry.conversionRate == -1.0 ? '-' : _cryptoEntry.conversionRate)}€", textScaleFactor: 1.5,),
+            title: Text(_cryptoEntry.abreviation),
+            subtitle: Text(_cryptoEntry.name),
+            trailing: Text("${(_cryptoEntry.conversionRate == -1.0 ? '-' : (_cryptoEntry.conversionRate))}€", textScaleFactor: 1.5,),
           ),
         ]
       ),
