@@ -1,0 +1,22 @@
+html, body {
+  font-family: sans-serif;
+}
+
+#root {
+  padding: 20px;
+  max-width: 580px;
+}
+
+.change {
+  background: #efefef;
+  border: 1px solid #2c2c29;
+  border-radius: 3px;
+  display: block;
+  margin-bottom: 5px;
+  padding: 5px;
+}
+
+.change .subject {
+  display: block;
+  margin-bottom: 5px;
+}
