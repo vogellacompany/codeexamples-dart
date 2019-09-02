@@ -1,0 +1,18 @@
+import 'dart:convert';
+import 'dart:io';
+
+import '../lib/fetcher.dart';
+
+Future main() async {
+  var server = await HttpServer.bind(
+    InternetAddress.loopbackIPv4, // <1>
+    4040, // <2>
+  );
+  print('Listening on localhost:${server.port}');
+
+  await for (HttpRequest request in server) {
+    var changes = await new Fetcher().fetchChanges();
+    request.response.write(jsonEncode(changes)); // <3>
+    await request.response.close();
+  }
+}
