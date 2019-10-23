@@ -3,8 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
-import 'package:github_viewer/data/issue.dart';
-import 'package:github_viewer/data/issue_comment.dart';
+import 'package:github_viewer/page/homepage.dart';
 import 'package:github_viewer/util/util.dart';
 import 'package:http/http.dart' as http;
 
@@ -19,24 +18,21 @@ class IssuePage extends StatefulWidget {
   }
 }
 
-class _IssueState extends State<IssuePage> {
-  Future<List<IssueComment>> comments;
+class IssueComment {
+  String body;
+  String userName;
+  DateTime createdAt;
+}
 
+class _IssueState extends State<IssuePage> {
   @override
   Widget build(BuildContext context) {
-    comments = getComments();
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.issue.title),
-        actions: <Widget>[
-          IconButton(
-            icon: Icon(Icons.more_vert),
-            onPressed: () {},
-          )
-        ],
       ),
       body: FutureBuilder(
-        future: comments,
+        future: getComments(),
         builder:
             (BuildContext context, AsyncSnapshot<List<IssueComment>> snapshot) {
           if (snapshot.hasData) {
@@ -89,17 +85,12 @@ class _IssueComment extends StatelessWidget {
               children: [
                 Expanded(
                   child: Container(
+                    padding: EdgeInsets.symmetric(vertical: 12.0),
                     child: _ItemInfo(
                       comment.userName,
                       'commented ${formatDate(comment.createdAt)} ago',
                     ),
                   ),
-                ),
-                IconButton(
-                  icon: Icon(Icons.more_vert),
-                  onPressed: () {
-                    _showActionsDialog(context);
-                  },
                 )
               ],
             ),
@@ -109,25 +100,6 @@ class _IssueComment extends StatelessWidget {
           ],
         ),
       ),
-    );
-  }
-
-  void _showActionsDialog(BuildContext context) {
-    showDialog(
-      context: context,
-      builder: (context) {
-        return SimpleDialog(
-          title: Text('asd'),
-          children: <Widget>[
-            SimpleDialogOption(
-              child: Text('Delete'),
-            ),
-            SimpleDialogOption(
-              child: Text('Delete'),
-            )
-          ],
-        );
-      },
     );
   }
 }
@@ -165,12 +137,12 @@ class _IssueContent extends StatelessWidget {
   Widget build(BuildContext context) {
     return Card(
       child: Padding(
-        padding: const EdgeInsets.all(12.0),
+        padding: EdgeInsets.all(12.0),
         child: Column(
           children: <Widget>[
             _IssueStateRow(issue),
             Padding(
-              padding: const EdgeInsets.only(top: 8.0),
+              padding: EdgeInsets.only(top: 8.0),
               child: MarkdownBody(data: issue.body),
             ),
           ],

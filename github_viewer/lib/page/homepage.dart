@@ -1,7 +1,6 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:github_viewer/data/issue.dart';
 import 'package:github_viewer/page/issue_page.dart';
 import 'package:github_viewer/util/util.dart';
 import 'package:http/http.dart' as http;
@@ -9,6 +8,15 @@ import 'package:http/http.dart' as http;
 class Homepage extends StatefulWidget {
   @override
   _HomepageState createState() => _HomepageState();
+}
+
+class Issue {
+  int number;
+  String state;
+  String title;
+  String body;
+  String userName;
+  DateTime createdAt;
 }
 
 class _HomepageState extends State<Homepage> {
@@ -20,12 +28,6 @@ class _HomepageState extends State<Homepage> {
     return Scaffold(
       appBar: AppBar(
         title: Text('GitHub Issue Viewer'),
-        actions: <Widget>[
-          IconButton(
-            onPressed: () => _showRepositorySettings(context),
-            icon: Icon(Icons.settings),
-          )
-        ],
       ),
       body: FutureBuilder(
         future: issues,
@@ -85,17 +87,6 @@ class _HomepageState extends State<Homepage> {
           ..userName = entry['user']['login']
           ..createdAt = DateTime.parse(entry['created_at']))
         .toList();
-  }
-
-  void _showRepositorySettings(BuildContext context) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return SimpleDialog(
-          children: <Widget>[TextField()],
-        );
-      },
-    );
   }
 }
 
