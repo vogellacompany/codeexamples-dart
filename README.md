@@ -1,4 +1,8 @@
-# codeexamples-dart
+# Codeexamples for Dart
 
-Dart and Flutter codeexamples.
-These examples are mostly the basis for the [Dart tutorials on vogella.com](https://vogella.com/tutorials/Dart/article.html).
+This repository contains codeexamples for projects and topics written in Dart.
+
+_If you are looking for Flutter examples, check out [vogellacompany/codeexamples-flutter](https://github.com/vogellacompany/codeexamples-flutter)_
+
+Also check out the [Dart tutorial](https://www.vogella.com/tutorials/Dart/article.html).
+
