@@ -1,0 +1,11 @@
+What the Program Does:
+
+* It recursively traverses the file system starting from the given target directory.
+
+* It looks for files named 008_resourceslocal.adoc.
+
+* For each found file, it appends the following content to the end:
+
+`include::../10_Include/sourcejava.adoc[]`
+
+* It prints out the path of each file it modifies.
